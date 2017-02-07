@@ -1,6 +1,6 @@
-websocket-client-simple
+websocket-actioncable-client
 =======================
-Simple WebSocket Client for Ruby
+Simple WebSocket Client for Ruby. It can work with ActionCable server
 
 - https://github.com/shokai/websocket-client-simple
 - https://rubygems.org/gems/websocket-client-simple
@@ -26,6 +26,7 @@ ws.on :message do |msg|
 end
 
 ws.on :open do
+  # Send command to subscribe to ActionCable's specific channel after connect to socket
   ws.send ({"command":"subscribe","identifier":"{\"channel\":\"LocationChannel\",\"request_id\":\"b03e65bc-994c-d1e6-cd71-51b7a86242d8\"}"}.to_json)
 end
 
