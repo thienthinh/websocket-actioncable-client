@@ -5,7 +5,6 @@ Simple WebSocket Client for Ruby
 - https://github.com/shokai/websocket-client-simple
 - https://rubygems.org/gems/websocket-client-simple
 
-[![Circle CI](https://circleci.com/gh/shokai/websocket-client-simple.svg?style=svg)](https://circleci.com/gh/shokai/websocket-client-simple)
 
 Installation
 ------------
@@ -18,8 +17,9 @@ Usage
 ```ruby
 require 'rubygems'
 require 'websocket-client-simple'
+require 'json'
 
-ws = WebSocket::Client::Simple.connect 'ws://example.com:8888'
+ws = WebSocket::Client::Simple.connect 'ws://example.com:3000/cable'
 
 ws.on :message do |msg|
   puts msg.data
@@ -56,6 +56,7 @@ WebSocket::Client::Simple.connect 'ws://example.com:8888' do |ws|
   end
 end
 ```
+
 
 
 ## The Action Cable Protocol
