@@ -26,7 +26,7 @@ ws.on :message do |msg|
 end
 
 ws.on :open do
-  ws.send 'hello!!!'
+  ws.send ({"command":"subscribe","identifier":"{\"channel\":\"LocationChannel\",\"request_id\":\"b03e65bc-994c-d1e6-cd71-51b7a86242d8\"}"}.to_json)
 end
 
 ws.on :close do |e|
@@ -58,18 +58,35 @@ end
 ```
 
 
-Sample
-------
-[websocket chat](https://github.com/shokai/websocket-client-simple/tree/master/sample)
+## The Action Cable Protocol
 
+There really isn't that much to this gem. :-)
 
-Test
-----
+1. Connect to the Action Cable URL
+2. After the connection succeeds, send a subscribe message
+  - The subscribe message JSON should look like this
+    - `{"command":"subscribe","identifier":"{\"channel\":\"MeshRelayChannel\"}"}`
+  - You should receive a message like this:
+    - `{"identifier"=>"{\"channel\":\"MeshRelayChannel\"}", "type"=>"confirm_subscription"}`
+3. Once subscribed, you can send messages.
+  - Make sure that the `action` string matches the data-handling method name on your ActionCable server.
+  - Your message JSON should look like this:
+    - `{"command":"message","identifier":"{\"channel\":\"MeshRelayChannel\"}","data":"{\"to\":\"user1\",\"message\":\"hello from user2\",\"action\":\"chat\"}"}`
+    - Received messages should look about the same
 
-    % gem install bundler
-    % bundle install
-    % export WS_PORT=8888
-    % rake test
+4. Notes:
+  - Every message sent to the server has a `command` and `identifier` key.
+  - Ping messages from the action cable server look like:
+    - `{ "type" => "ping", "message" =>  1461845503 }`
+  - The channel value must match the `name` of the channel class on the ActionCable server.
+  - `identifier` and `data` are redundantly jsonified. So, for example (in ruby):
+```ruby
+payload = {
+  command: 'command text',
+  identifier: { channel: 'MeshRelayChannel' }.to_json,
+  data: { to: 'user', message: 'hi', action: 'chat' }.to_json
+}.to_json
+```
 
 
 Contributing
